@@ -1,9 +1,13 @@
 ﻿@page "/booking"
+@page "/booking/{bookingId:guid}"
 
-<h3>Make booking</h3>
+<h3> @( @bookingId.HasValue ? "Edit" : "Make" ) booking</h3>
 
-<AddEditBooking />
+<AddEditBooking BookingId="@bookingId" />
 
 @code {
+
+    [Parameter]
+    public Guid? bookingId { get; set; }
 
 }

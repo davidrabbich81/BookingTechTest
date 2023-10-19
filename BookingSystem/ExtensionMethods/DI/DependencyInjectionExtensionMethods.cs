@@ -67,7 +67,7 @@ namespace BookingSystem
                 throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 
-            builder.Services.AddDbContext<BookingSystemDbContext>(options =>
+            builder.Services.AddDbContextPool<BookingSystemDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
             return builder;

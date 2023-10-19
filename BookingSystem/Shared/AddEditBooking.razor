@@ -5,37 +5,35 @@
 
 <div class="add-edit-booking">
 
-    <h3>Add booking</h3>
-
     <form>
         <div class="form-group">
             <label for="exampleInputEmail1">Name</label>
-            <input type="text" class="form-control" id="inpName" value="@BookingData.Name" placeholder="Enter Name">
+            <input type="text" class="form-control" id="inpName" value="@BookingData?.Name" placeholder="Enter Name">
         </div>
 
         <div class="form-group">
             <label for="exampleInputEmail1">Email address</label>
-            <input type="email" class="form-control" id="inpEmail" value="@BookingData.EmailAddress" placeholder="Enter email">
+            <input type="email" class="form-control" id="inpEmail" value="@BookingData?.EmailAddress" placeholder="Enter email">
         </div>
 
         <div class="form-group">
             <label for="exampleInputEmail1">Contact Number</label>
-            <input type="text" class="form-control" id="inpContactNumber" value="@BookingData.ContactNumber" placeholder="Enter number">
+            <input type="text" class="form-control" id="inpContactNumber" value="@BookingData?.ContactNumber" placeholder="Enter number">
         </div>
 
         <div class="form-group">
             <label for="exampleInputEmail1">Booking date</label>
-            <input type="date" class="form-control" id="inpBookingDate" value="@BookingData.BookingDate" placeholder="Enter booking date">
+            <input type="date" class="form-control" id="inpBookingDate" value="@BookingData?.BookingDate" placeholder="Enter booking date">
         </div>
 
         <div class="form-group">
             <label for="exampleInputEmail1">Flexibility</label>
-            <input type="date" class="form-control" id="inpBookingDate" value="@BookingData.Flexibility">
+            <input type="text" class="form-control" id="inpBookingDate" value="@BookingData?.Flexibility">
         </div>
 
         <div class="form-group">
             <label for="exampleInputEmail1">Vehicle size</label>
-            <input type="date" class="form-control" id="inpBookingDate" value="@BookingData.VehicleSize">
+            <input type="text" class="form-control" id="inpBookingDate" value="@BookingData?.VehicleSize">
         </div>
 
         <button type="submit" class="btn btn-primary" @onclick="SubmitBooking">Submit booking</button>
@@ -50,18 +48,27 @@
     /// <summary>
     /// The ID of the booking to load
     /// </summary>
+    [Parameter]
     public Guid? BookingId { get; set; }
 
     /// <summary>
     /// The booking data to be sent to the server
     /// </summary>
-    public PostPutBooking BookingData { get; set; }
+    public PostPutBooking? BookingData { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        BookingData = BookingId.HasValue ? 
-        (await bookingRepository.GetBookingById(BookingId.Value)).ToPostPutModel() : 
-        new PostPutBooking() { Name = "Test name" };
+        if (BookingId.HasValue)
+        {
+            BookingData = (await bookingRepository.GetBookingById(BookingId.Value))?.ToPostPutModel();
+        }
+        else
+        {
+            BookingData = new PostPutBooking() {
+                Name = "Test name"
+            };
+        }
+
     }
 
     public async Task SubmitBooking()

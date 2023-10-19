@@ -29,9 +29,12 @@ namespace BookingSystem.Data.Repositories
         /// <param name="bookingId"></param>
         /// <returns></returns>
         public async Task<Booking> GetBookingById(Guid bookingId)
-            => await dbContext.Bookings
-                    .FirstOrDefaultAsync(x => x.BookingId == bookingId && !x.Deleted) ?? 
+        {
+            var booking = await dbContext.Bookings
+                    .FirstOrDefaultAsync(x => x.BookingId == bookingId && !x.Deleted) ??
             throw new ArgumentException("A Booking could not be found by that id");
+            return booking;
+        }
 
         /// <summary>
         /// Gets all confirmed bookings in the system
