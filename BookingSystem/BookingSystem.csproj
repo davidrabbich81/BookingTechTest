@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <Folder Include="Data\PostPutModels\" />
-    <Folder Include="Data\ViewModels\" />
+    <Folder Include="Data\Repositories\Interface\" />
   </ItemGroup>
 
   <ItemGroup>
