@@ -35,7 +35,7 @@ namespace BookingSystem.Data.Repositories
                 return new LoginResult(success: false);
 
             await MarkUserAsUpdated(user.UserId, DateTime.UtcNow);
-            return new LoginResult(success: true, id: user.UserId);
+            return new LoginResult(success: true, id: user.UserId); 
         }
 
         /// <summary>
