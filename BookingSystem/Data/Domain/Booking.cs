@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using BookingSystem.Data.PostPutModels;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace BookingSystem.Data.Domain
@@ -94,5 +95,33 @@ namespace BookingSystem.Data.Domain
         Medium = 1,
         Large = 2,
         Van = 3
+    }
+
+    public static class BookingExtensions
+    {
+        /// <summary>
+        /// Creates a post put model to present to the UI
+        /// </summary>
+        /// <param name="booking"></param>
+        /// <returns></returns>
+        public static PostPutBooking ToPostPutModel(this Booking booking)
+        {
+            PostPutBooking result = new PostPutBooking()
+            {
+                BookingDate = booking.BookingDate,
+                Confirmed = booking.Confirmed,
+                Deleted = booking.Deleted,
+                ConfirmedByUserId = booking.ConfirmedByUserId,
+                ContactNumber = booking.ContactNumber,
+                DateConfirmed = booking.DateConfirmed,
+                DateCreated = booking.DateCreated,
+                EmailAddress = booking.EmailAddress,
+                Flexibility = booking.Flexibility,
+                VehicleSize = booking.VehicleSize,
+                Name = booking.Name,
+            };
+
+            return result;
+        }
     }
 }
