@@ -32,7 +32,7 @@ namespace BookingSystem.Data.Repositories
             );
 
             if (user == null)
-                return new LoginResult(success: false);
+                return new LoginResult(success: false); 
 
             await MarkUserAsUpdated(user.UserId, DateTime.UtcNow);
             return new LoginResult(success: true, id: user.UserId); 
