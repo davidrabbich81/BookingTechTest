@@ -1,5 +1,7 @@
 ﻿using BookingSystem.Data.Domain;
+using BookingSystem.Options;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace BookingSystem
 {
@@ -17,6 +19,18 @@ namespace BookingSystem
         public static WebApplicationBuilder InjectServices(this WebApplicationBuilder builder)
         {
             // add services here
+
+            return builder;
+        }
+
+        public static WebApplicationBuilder InjectOptions(this WebApplicationBuilder builder, IConfiguration configuration)
+        {
+            // add options here
+
+            builder.Services.Configure<EncryptionOptions>(options => 
+                configuration.GetSection(nameof(EncryptionOptions)).Bind(options)
+            );
+
 
             return builder;
         }
