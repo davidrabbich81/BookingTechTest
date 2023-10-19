@@ -1,0 +1,7 @@
+﻿
+/.vs/
+/*/node_modules/**
+/.github/**
+.DS_Store
+/*/obj/**
+/*/bin/**
