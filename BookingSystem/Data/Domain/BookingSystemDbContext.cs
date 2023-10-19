@@ -11,6 +11,11 @@ namespace BookingSystem.Data.Domain
         /// </summary>
         public DbSet<Booking> Bookings { get; set; }
 
+        /// <summary>
+        /// Administration users in the system
+        /// </summary>
+        public DbSet<User> Users { get; set; }
+
 
         public BookingSystemDbContext()
         {
