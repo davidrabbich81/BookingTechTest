@@ -1,11 +1,12 @@
 ﻿using BookingSystem.Data.Domain;
+using BookingSystem.Data.Repositories.Interface;
 using BookingSystem.Data.ViewModels;
 using BookingSystem.Services.Interface;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookingSystem.Data.Repositories
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly BookingSystemDbContext dbContext;
         private readonly IEncryptionService encryptionService;
@@ -26,16 +27,16 @@ namespace BookingSystem.Data.Repositories
         {
             var encryptedPassword = encryptionService.EncryptText(password);
             var user = await dbContext.Users.FirstOrDefaultAsync(
-                x => x.Emailaddress == emailAddress && 
+                x => x.Emailaddress == emailAddress &&
                 x.Password == encryptedPassword &&
                 x.Deleted
             );
 
             if (user == null)
-                return new LoginResult(success: false); 
+                return new LoginResult(success: false);
 
             await MarkUserAsUpdated(user.UserId, DateTime.UtcNow);
-            return new LoginResult(success: true, id: user.UserId); 
+            return new LoginResult(success: true, id: user.UserId);
         }
 
         /// <summary>
@@ -51,6 +52,23 @@ namespace BookingSystem.Data.Repositories
             if (user == null) throw new ArgumentException("There was no user found with that Id");
 
             user.DateLastLogin = dateOfLogin;
+
+            await dbContext.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Marks a user as deleted in the system
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="deleted"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public async Task MarkUserAsDeleted(Guid userId, bool deleted)
+        {
+            var user = await dbContext.Users.FirstOrDefaultAsync(x => x.UserId == userId);
+            if (user == null) throw new ArgumentException("There was no user found with that Id");
+
+            user.Deleted = deleted;
 
             await dbContext.SaveChangesAsync();
         }

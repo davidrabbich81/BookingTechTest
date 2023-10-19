@@ -1,15 +1,10 @@
-﻿using System.ComponentModel;
+﻿using BookingSystem.Data.Domain;
 using System.ComponentModel.DataAnnotations;
 
-namespace BookingSystem.Data.Domain
+namespace BookingSystem.Data.PostPutModels
 {
-    public class Booking
+    public class PostPutBooking
     {
-        /// <summary>
-        /// The unique ID of the booking
-        /// </summary>
-        public Guid BookingId { get; set; } = Guid.NewGuid();
-
         /// <summary>
         /// The date the booking was created
         /// </summary>
@@ -70,29 +65,31 @@ namespace BookingSystem.Data.Domain
 
     }
 
-    /// <summary>
-    /// How flexible the booking can be around the chosen date
-    /// </summary>
-    public enum BookingFlexibility : byte
+    public static class PostPutBookingExtensions
     {
-        [Description("Exact date only")]
-        ZeroDays = 0,
-        [Description("+/- 1 Day")]
-        OneDay = 1,
-        [Description("+/- 2 Days")]
-        TwoDays = 2,
-        [Description("+/- 3 Days")]
-        ThreeDays = 3
-    }
+        /// <summary>
+        /// Creates a domain model to save to the database
+        /// </summary>
+        /// <param name="booking"></param>
+        /// <returns></returns>
+        public static Booking ToEFModel(this PostPutBooking booking)
+        {
+            Booking result = new Booking()
+            {
+                BookingDate = booking.BookingDate,
+                Confirmed = booking.Confirmed,
+                Deleted = booking.Deleted,
+                ConfirmedByUserId = booking.ConfirmedByUserId,
+                ContactNumber = booking.ContactNumber,
+                DateConfirmed = booking.DateConfirmed,
+                DateCreated = booking.DateCreated,
+                EmailAddress = booking.EmailAddress,
+                Flexibility = booking.Flexibility,
+                VehicleSize = booking.VehicleSize,
+                Name = booking.Name,
+            };
 
-    /// <summary>
-    /// The size of vehicle needed (No description as names match perfectly
-    /// </summary>
-    public enum VehicleSize : byte
-    {
-        Small = 0,
-        Medium = 1,
-        Large = 2,
-        Van = 3
+            return result;
+        }
     }
 }
