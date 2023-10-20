@@ -28,7 +28,7 @@ else
             @foreach (var booking in bookings)
             {
                 <tr>
-                    <td>@booking.Name</td>
+                    <td><a href="/booking/@booking.BookingId">@booking.Name</a></td>
                     <td>@booking.EmailAddress</td>
                     <td>@booking.ContactNumber</td>
                     <td>@booking.BookingDate</td>

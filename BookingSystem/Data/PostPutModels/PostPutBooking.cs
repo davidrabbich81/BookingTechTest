@@ -31,7 +31,7 @@ namespace BookingSystem.Data.PostPutModels
         /// <summary>
         /// The date the booking was requested for
         /// </summary>
-        public DateTime BookingDate { get; set; }
+        public DateTime BookingDate { get; set; } = DateTime.Today.AddDays(1);
 
         /// <summary>
         /// How flexible the user is on their booking date

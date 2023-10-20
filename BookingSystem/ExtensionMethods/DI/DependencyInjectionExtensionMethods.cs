@@ -24,8 +24,6 @@ namespace BookingSystem
         {
             // add services here
             builder.Services.AddTransient<IEncryptionService, EncryptionService>();
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 
             return builder;
         }
@@ -50,8 +48,8 @@ namespace BookingSystem
         public static WebApplicationBuilder InjectRepositories(this WebApplicationBuilder builder)
         {
             // add repositories here
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+            builder.Services.AddTransient<IUserRepository, UserRepository>();
+            builder.Services.AddTransient<IBookingRepository, BookingRepository>();
 
             return builder;
         }
