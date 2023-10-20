@@ -30,7 +30,7 @@ else
         <tbody>
             @foreach (var booking in bookings)
             {
-                <tr>
+                <tr style="background-color: @(booking.Confirmed ? "#Fafff4" : "#Fff6f4")">
                     <td><a href="/booking/@booking.BookingId">@booking.Name</a></td>
                     <td>@booking.EmailAddress</td>
                     <td>@booking.ContactNumber</td>
