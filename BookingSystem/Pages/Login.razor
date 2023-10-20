@@ -1,0 +1,49 @@
+﻿@page "/login"
+@using BookingSystem.Data.Repositories.Interface;
+@using BookingSystem.Data.Domain;
+@using BookingSystem.Data.ViewModels;
+@using Microsoft.AspNetCore.Authentication.Cookies;
+@using Microsoft.Extensions.DependencyInjection;
+@using System.Security.Claims;
+@inject IJSRuntime JSRunTime;
+@inject NavigationManager navManager;
+
+<PageTitle>Login</PageTitle>
+
+<h1>Login</h1>
+<CascadingAuthenticationState>
+<AuthorizeView>
+    <Authorized>
+        <p>Welcome, @(context.User?.Identity?.Name)</p>
+    </Authorized>
+    <NotAuthorized>
+        <form>
+            <div class="form-group">
+                <label for="inpEmail">Email address</label>
+                <input type="email" class="form-control" id="inpEmail" @bind="EmailAddress" placeholder="Enter email address">
+            </div>
+            <div class="form-group">
+                <label for="inpPassword">Password</label>
+                <input type="password" class="form-control" id="inpPassword" @bind="Password" placeholder="Enter password">
+            </div>
+            <button type="button" class="btn btn-primary" @onclick="AttemptLogin">Login</button>
+        </form>
+    </NotAuthorized>
+</AuthorizeView>
+</CascadingAuthenticationState>
+
+
+@code {
+    public string EmailAddress { get; set; } = string.Empty;
+
+    public string Password { get; set; } = string.Empty;
+
+    public LoginResult? Result { get; set; }
+
+    private async void AttemptLogin()
+    {
+        var authModule = await JSRunTime.InvokeAsync<IJSObjectReference>("import", "./js/Authentication.js");
+        await authModule.InvokeVoidAsync("SignIn", EmailAddress, Password, "/");
+    }
+
+}

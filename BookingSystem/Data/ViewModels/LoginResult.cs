@@ -15,6 +15,11 @@
         /// </summary>
         public Guid? UserId { get; set; }
 
+        /// <summary>
+        /// The name of the user logged in
+        /// </summary>
+        public string Name { get; set; }
+
         public LoginResult(bool success, Guid? id = null)
         {
             this.Success = success;

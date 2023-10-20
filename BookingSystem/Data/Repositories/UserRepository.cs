@@ -29,14 +29,14 @@ namespace BookingSystem.Data.Repositories
             var user = await dbContext.Users.FirstOrDefaultAsync(
                 x => x.Emailaddress == emailAddress &&
                 x.Password == encryptedPassword &&
-                x.Deleted
+                !x.Deleted
             );
 
             if (user == null)
                 return new LoginResult(success: false);
 
             await MarkUserAsUpdated(user.UserId, DateTime.UtcNow);
-            return new LoginResult(success: true, id: user.UserId);
+            return new LoginResult(success: true, id: user.UserId) { Name = user.Emailaddress };
         }
 
         /// <summary>

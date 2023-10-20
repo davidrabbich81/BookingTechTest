@@ -28,12 +28,12 @@ namespace BookingSystem
             return builder;
         }
 
-        public static WebApplicationBuilder InjectOptions(this WebApplicationBuilder builder, IConfiguration configuration)
+        public static WebApplicationBuilder InjectOptions(this WebApplicationBuilder builder)
         {
             // add options here
 
             builder.Services.Configure<EncryptionOptions>(options => 
-                configuration.GetSection(nameof(EncryptionOptions)).Bind(options)
+                builder.Configuration.GetSection(nameof(EncryptionOptions)).Bind(options)
             );
 
 
