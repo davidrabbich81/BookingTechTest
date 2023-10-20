@@ -3,6 +3,7 @@
 @using BookingSystem.Data.Repositories.Interface;
 @using Microsoft.Extensions.DependencyInjection
 @inject IServiceScopeFactory ScopeFactory
+@inject NavigationManager NavManager
 
 <div class="add-edit-booking">
 
@@ -118,6 +119,8 @@
                     await repo.UpdateBooking(BookingId.Value, BookingData);
                 else
                     await repo.CreateNewBooking(BookingData);
+
+                NavManager.NavigateTo("/bookings");
             }
         }
     }

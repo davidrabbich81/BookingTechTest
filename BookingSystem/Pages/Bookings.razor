@@ -1,6 +1,8 @@
 ﻿@page "/bookings"
 @using BookingSystem.Data.Repositories.Interface;
-@inject IBookingRepository bookingRepository
+@using BookingSystem.Data.Domain;
+@using Microsoft.Extensions.DependencyInjection
+@inject IServiceScopeFactory ScopeFactory
 
 <PageTitle>Bookings</PageTitle>
 
@@ -21,6 +23,7 @@ else
                 <th>Booking date</th>
                 <th>Flexibility</th>
                 <th>Vehicle size</th>
+                <th>Confirmed</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -34,7 +37,15 @@ else
                     <td>@booking.BookingDate</td>
                     <td>@booking.Flexibility</td>
                     <td>@booking.VehicleSize</td>
-                    <td></td>
+                    <td><span class="oi oi-@(booking.Confirmed ? "check" : "x")" aria-hidden="true"></span></td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="() => ConfirmBooking(booking)">
+                            <span class="oi oi-check" aria-hidden="true"></span>
+                        </button>
+                        <button class="btn btn-danger" @onclick="() => DeleteBooking(booking)">
+                            <span class="oi oi-circle-x" aria-hidden="true"></span>
+                        </button>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -42,10 +53,45 @@ else
 }
 
 @code {
-    private IEnumerable<BookingSystem.Data.Domain.Booking>? bookings;
+    private IEnumerable<Booking>? bookings;
 
     protected override async Task OnInitializedAsync()
     {
-        bookings = await bookingRepository.GetAllBookings();
+        await LoadBookings();
+    }
+
+    public async Task LoadBookings()
+    {
+        using (var serviceScope = ScopeFactory.CreateScope())
+        {
+            var repo = serviceScope.ServiceProvider.GetService<IBookingRepository>();
+            if (repo is not null)
+                bookings = await repo.GetAllBookings();
+        }
+    }
+
+    public async Task ConfirmBooking(Booking booking)
+    {
+        using (var serviceScope = ScopeFactory.CreateScope())
+        {
+            var repo = serviceScope.ServiceProvider.GetService<IBookingRepository>();
+            if (repo is not null) {
+                await repo.ConfirmBooking(booking.BookingId, !booking.Confirmed);
+                await LoadBookings();
+            }
+        }
+    }
+
+    public async Task DeleteBooking(Booking booking)
+    {
+        using (var serviceScope = ScopeFactory.CreateScope())
+        {
+            var repo = serviceScope.ServiceProvider.GetService<IBookingRepository>();
+            if (repo is not null)
+            {
+                await repo.DeleteBooking(booking.BookingId);
+                await LoadBookings();
+            }
+        }
     }
 }
