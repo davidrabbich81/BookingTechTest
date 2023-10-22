@@ -29,13 +29,13 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var booking in bookings)
+            @foreach (var booking in bookings.OrderByDescending(x => x.BookingDate))
             {
                 <tr style="background-color: @(booking.Confirmed ? "#Fafff4" : "#Fff6f4")">
                     <td><a href="/booking/@booking.BookingId">@booking.Name</a></td>
                     <td>@booking.EmailAddress</td>
                     <td>@booking.ContactNumber</td>
-                    <td>@booking.BookingDate</td>
+                    <td>@booking.BookingDate.ToShortDateString()</td>
                     <td>@booking.Flexibility</td>
                     <td>@booking.VehicleSize</td>
                     <td><span class="oi oi-@(booking.Confirmed ? "check" : "x")" aria-hidden="true"></span></td>
