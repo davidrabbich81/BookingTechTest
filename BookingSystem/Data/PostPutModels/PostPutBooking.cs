@@ -1,4 +1,5 @@
-﻿using BookingSystem.Data.Domain;
+﻿using BookingSystem.Attributes;
+using BookingSystem.Data.Domain;
 using System.ComponentModel.DataAnnotations;
 
 namespace BookingSystem.Data.PostPutModels
@@ -14,23 +15,30 @@ namespace BookingSystem.Data.PostPutModels
         /// The full name of the person making the booking request
         /// </summary>
         [MaxLength(255)]
+        [Required]
+        [MinLength(2)]
         public string? Name { get; set; }
 
         /// <summary>
         /// The Email address of the person making the booking request
         /// </summary>
         [MaxLength(500)]
+        [Required]
+        [EmailAddress]
         public string? EmailAddress { get; set; }
 
         /// <summary>
         /// The contact number of the person making the booking request
         /// </summary>
         [MaxLength(20)]
+        [Required]
+        [Phone]
         public string? ContactNumber { get; set; }
 
         /// <summary>
         /// The date the booking was requested for
         /// </summary>
+        [FutureDate]
         public DateTime BookingDate { get; set; } = DateTime.Today.AddDays(1);
 
         /// <summary>

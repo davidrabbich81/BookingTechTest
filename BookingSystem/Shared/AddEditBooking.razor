@@ -3,54 +3,74 @@
 @using BookingSystem.Data.Repositories.Interface;
 @using Microsoft.Extensions.DependencyInjection
 @inject IServiceScopeFactory ScopeFactory
-@inject NavigationManager NavManager
 
 <div class="add-edit-booking">
 
-    <form>
-        <div class="form-group">
-            <label for="inpName">Name</label>
-            <input type="text" class="form-control" id="inpName" @bind="BookingData.Name" placeholder="Enter Name">
-        </div>
+    @if (Submitted)
+    {
+        @if (BookingId.HasValue)
+        {
+            <p>Thanks for updating the booking</p>
+        } 
+        else
+        {
+            <p>Thanks for your booking, we will be in touch to confirm</p>
+        }
+    } 
+    else
+    {
+        <EditForm Model="BookingData" OnValidSubmit="SubmitBooking" >
 
-        <div class="form-group">
-            <label for="inpEmail">Email address</label>
-            <input type="email" class="form-control" id="inpEmail" @bind="BookingData.EmailAddress" placeholder="Enter email">
-        </div>
+            <DataAnnotationsValidator />
+            <ValidationSummary />
 
-        <div class="form-group">
-            <label for="inpContactNumber">Contact Number</label>
-            <input type="text" class="form-control" id="inpContactNumber" @bind="BookingData.ContactNumber" placeholder="Enter number">
-        </div>
+            <div class="form-group">
+                <label for="inpName">Name</label>
+                <input type="text" class="form-control" id="inpName" @bind="BookingData.Name" placeholder="Enter Name">
+            </div>
 
-        <div class="form-group">
-            <label for="inpBookingDate">Booking date</label>
-            <input type="date" class="form-control" id="inpBookingDate" @bind="BookingData.BookingDate" placeholder="Enter booking date">
-        </div>
+            <div class="form-group">
+                <label for="inpEmail">Email address</label>
+                <input type="email" class="form-control" id="inpEmail" @bind="BookingData.EmailAddress" placeholder="Enter email">
+            </div>
 
-        <div class="form-group">
-            <label for="inpFlexibility">Flexibility</label>
-            <select class="form-control" id="inpFlexibility" @bind="BookingData.Flexibility">
-                @foreach (var option in FlexibilityOptions)
-                {
-                    <option value="@option.Key">@option.Value</option>
-                }
-            </select>
-        </div>
+            <div class="form-group">
+                <label for="inpContactNumber">Contact Number</label>
+                <input type="text" class="form-control" id="inpContactNumber" @bind="BookingData.ContactNumber" placeholder="Enter number">
+            </div>
 
-        <div class="form-group">
-            <label for="inpVehicleSize">Vehicle size</label>
-            <select class="form-control" id="inpVehicleSize" @bind="BookingData.VehicleSize">
-                @foreach (var option in VehicleSizeOptions)
-                {
-                    <option value="@option.Key">@option.Value</option>
-                }
-            </select>
-        </div>
+            <div class="form-group">
+                <label for="inpBookingDate">Booking date</label>
+                <input type="date" class="form-control" id="inpBookingDate" @bind="BookingData.BookingDate" placeholder="Enter booking date">
+            </div>
 
-        <button type="submit" class="btn btn-primary" @onclick="SubmitBooking">Submit booking</button>
-    </form>
+            <div class="form-group">
+                <label for="inpFlexibility">Flexibility</label>
+                <select class="form-control" id="inpFlexibility" @bind="BookingData.Flexibility">
+                    @foreach (var option in FlexibilityOptions)
+                    {
+                        <option value="@option.Key">@option.Value</option>
+                    }
+                </select>
+            </div>
 
+            <div class="form-group">
+                <label for="inpVehicleSize">Vehicle size</label>
+                <select class="form-control" id="inpVehicleSize" @bind="BookingData.VehicleSize">
+                    @foreach (var option in VehicleSizeOptions)
+                    {
+                        <option value="@option.Key">@option.Value</option>
+                    }
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">@(BookingId.HasValue ? "Edit" : "Submit") booking</button>
+
+        </EditForm>
+        
+    }
+
+    
 
 </div>
 
@@ -62,6 +82,11 @@
     /// </summary>
     [Parameter]
     public Guid? BookingId { get; set; }
+
+    /// <summary>
+    /// Indicates if the booking has been submitted or updated
+    /// </summary>
+    public bool Submitted { get; set; }
 
     /// <summary>
     /// The dropdown list source for the flexibility options
@@ -120,7 +145,7 @@
                 else
                     await repo.CreateNewBooking(BookingData);
 
-                NavManager.NavigateTo("/bookings");
+                Submitted = true;
             }
         }
     }
