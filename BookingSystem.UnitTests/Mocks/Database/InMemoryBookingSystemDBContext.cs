@@ -31,6 +31,29 @@ namespace BookingSystem.UnitTests.Mocks.Database
         private void GenerateMockData(BookingSystemDbContext context)
         {
             // generate users 
+            GenerateUsers(context);
+
+            //generate bookings
+            GenerateBookings(context);
+
+            context.SaveChanges();
+        }
+
+        private void GenerateBookings(BookingSystemDbContext context)
+        {
+            context.Bookings.Add(new Booking()
+            {
+                BookingId = Guid.NewGuid(),
+                BookingDate = DateTime.Today.AddDays(2),
+                DateCreated = DateTime.UtcNow,
+                EmailAddress = "email@address.com",
+                Name = "Booking contact",
+                ContactNumber = "0000000"
+            });
+        }
+
+        private static void GenerateUsers(BookingSystemDbContext context)
+        {
             context.Users.Add(new User()
             {
                 DateCreated = DateTime.UtcNow,
@@ -38,8 +61,8 @@ namespace BookingSystem.UnitTests.Mocks.Database
                 Password = "c73ocOI3ulrl6CDd1CfKce9HUIjnI0KmsJl7Qcq/WGs=",
                 UserId = Guid.NewGuid()
             });
-
-            context.SaveChanges();
         }
+
+
     }
 }
