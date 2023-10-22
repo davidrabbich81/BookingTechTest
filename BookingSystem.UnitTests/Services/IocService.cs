@@ -1,6 +1,11 @@
-﻿using BookingSystem.Options;
+﻿using BookingSystem.Data.Domain;
+using BookingSystem.Data.Repositories;
+using BookingSystem.Data.Repositories.Interface;
+using BookingSystem.Options;
 using BookingSystem.Services;
 using BookingSystem.Services.Interface;
+using BookingSystem.UnitTests.Mocks.Database;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -26,12 +31,27 @@ namespace PortfolioApi.Tests.Services
 
         private void DefineServices()
         {
+            // add the db context
+            AddService(new InMemoryBookingSystemDBContext().GetDBContext());
+
+            // add the encryption service
             AddService<IEncryptionService>(new EncryptionService(
                 Options.Create<EncryptionOptions>(new EncryptionOptions() { 
                     EncryptionKey = "v3c26vvfht7ert83cd84d02cake000a" 
                 })
             ));
 
+            // add the user repo
+            AddService<IUserRepository>(
+                new UserRepository(
+                    GetService<BookingSystemDbContext>(), 
+                    GetService<IEncryptionService>())
+            );
+
+            // add the booking repo
+            AddService<IBookingRepository>(
+                new BookingRepository(GetService<BookingSystemDbContext>())
+                );
 
         }
         public T GetService<T>()

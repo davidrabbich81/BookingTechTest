@@ -3,7 +3,7 @@ using PortfolioApi.Tests.Services;
 
 namespace BookingSystem.UnitTests.Tests.Encryption
 {
-    public class Tests
+    public class EncryptionServiceTests
     {
         private IEncryptionService encryptionService;
 
